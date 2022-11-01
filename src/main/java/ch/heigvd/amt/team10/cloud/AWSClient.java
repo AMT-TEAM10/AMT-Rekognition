@@ -21,7 +21,7 @@ public class AWSClient implements ICloudClient {
 
     private AWSClient() {
         BasicConfigurator.configure();
-        Dotenv dotenv = Dotenv.configure().load();
+        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
         this.region = Region.of(dotenv.get("AWS_REGION"));
         this.credentialsProvider = StaticCredentialsProvider.create(AwsBasicCredentials.create(dotenv.get("AWS_ACCESS_KEY_ID"), dotenv.get("AWS_SECRET_ACCESS_KEY")));
         this.s3Client = S3Client.builder().region(region).build();
