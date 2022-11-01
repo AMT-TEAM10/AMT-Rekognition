@@ -1,6 +1,5 @@
 package ch.heigvd.amt.team10.cloud;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
@@ -12,13 +11,11 @@ import java.io.File;
 
 class AWSDataObjectHelper implements IDataObjectHelper {
 
-    final Dotenv config = Dotenv.configure().load();
-
     @Override
     public byte[] get(String objectName) {
         GetObjectRequest objectRequestGet = GetObjectRequest
                 .builder()
-                .bucket(config.get("AWS_BUCKET_NAME"))
+                .bucket(System.getenv("AWS_BUCKET_NAME"))
                 .key(objectName)
                 .build();
 
@@ -36,7 +33,7 @@ class AWSDataObjectHelper implements IDataObjectHelper {
     @Override
     public void create(String objectName, File file) {
         PutObjectRequest objectRequest = PutObjectRequest.builder()
-                .bucket(config.get("AWS_BUCKET_NAME"))
+                .bucket(System.getenv("AWS_BUCKET_NAME"))
                 .key(objectName)
                 .build();
         AWSClient.getInstance().getS3Client().putObject(objectRequest, RequestBody.fromFile(file));
@@ -50,7 +47,7 @@ class AWSDataObjectHelper implements IDataObjectHelper {
     @Override
     public void delete(String objectName) {
         DeleteObjectRequest request = DeleteObjectRequest.builder()
-                .bucket(config.get("AWS_BUCKET_NAME"))
+                .bucket(System.getenv("AWS_BUCKET_NAME"))
                 .key(objectName)
                 .build();
 
