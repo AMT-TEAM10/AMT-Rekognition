@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class AWSS3Test {
     @Test
-    public void ShouldCreateAndGetObject() throws IOException {
+    public void shouldCreateAndGetObject() throws IOException {
         AWSClient client = AWSClient.getInstance();
         File originFile = new File("chad.jpg");
         client.dataObject().create("test.jpg", originFile);
@@ -26,7 +26,7 @@ public class AWSS3Test {
     }
 
     @Test
-    public void ShouldUpdateObject() throws IOException {
+    public void shouldUpdateObject() throws IOException {
         AWSClient client = AWSClient.getInstance();
         client.dataObject().create("test.jpg", new File("chad.jpg"));
         client.dataObject().update("test.jpg", new File("test.jpg"));
@@ -43,10 +43,16 @@ public class AWSS3Test {
     }
 
     @Test
-    public void ShouldDeleteObject() {
+    public void shouldDeleteObject() {
         AWSClient client = AWSClient.getInstance();
         client.dataObject().delete("test.jpg");
         assertThrows(RuntimeException.class, () -> client.dataObject().get("test.jpg"));
+    }
+
+    @Test
+    public void shouldGetAnUrlWithPublish() {
+        AWSClient client = AWSClient.getInstance();
+        System.out.println(client.dataObject().publish("test.jpg"));
     }
 
     @AfterAll

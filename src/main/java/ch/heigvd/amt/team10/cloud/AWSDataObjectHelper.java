@@ -7,8 +7,14 @@ import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
+import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 
 import java.io.File;
+import java.time.Duration;
 
 class AWSDataObjectHelper implements IDataObjectHelper {
 
@@ -59,6 +65,19 @@ class AWSDataObjectHelper implements IDataObjectHelper {
 
     @Override
     public String publish(String objectName) {
-        return null;
+        S3Presigner presigner = S3Presigner.create();
+
+        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                .bucket(config.get("AWS_BUCKET_NAME"))
+                .key(objectName)
+                .build();
+
+        GetObjectPresignRequest getObjectPresignRequest = GetObjectPresignRequest.builder()
+                .signatureDuration(Duration.ofMinutes(60))
+                .getObjectRequest(getObjectRequest)
+                .build();
+
+        PresignedGetObjectRequest presignedGetObjectRequest = presigner.presignGetObject(getObjectPresignRequest);
+        return presignedGetObjectRequest.url().toString();
     }
 }
