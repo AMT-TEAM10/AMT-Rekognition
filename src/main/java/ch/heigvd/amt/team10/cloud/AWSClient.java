@@ -6,18 +6,19 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 
 public class AWSClient implements ICloudClient {
-    private AWSDataObjectHelper dataObjectHelper;
+    private final AWSDataObjectHelper dataObjectHelper;
     private AWSLabelDetectorHelper labelDetectorHelper;
     private static AWSClient instance;
-    private Region region;
-    private S3Client s3;
+    private final Region region;
+    private final S3Client s3;
     private AwsBasicCredentials creds;
 
     private AWSClient() {
         Dotenv dotenv = Dotenv.configure().load();
         this.region = Region.of(dotenv.get("AWS_REGION"));
-        this.creds = AwsBasicCredentials.create(System.getenv("AWS_ACCESS_KEY_ID"), System.getenv("AWS_SECRET_ACCESS_KEY"));
+        this.creds = AwsBasicCredentials.create(dotenv.get("AWS_ACCESS_KEY_ID"), dotenv.get("AWS_SECRET_ACCESS_KEY"));
         this.s3 = S3Client.builder().region(region).build();
+        dataObjectHelper = new AWSDataObjectHelper();
     }
 
     public static AWSClient getInstance() {
@@ -32,5 +33,9 @@ public class AWSClient implements ICloudClient {
 
     public AWSLabelDetectorHelper labelDetector() {
         return labelDetectorHelper;
+    }
+
+    public S3Client getClient() {
+        return s3;
     }
 }
