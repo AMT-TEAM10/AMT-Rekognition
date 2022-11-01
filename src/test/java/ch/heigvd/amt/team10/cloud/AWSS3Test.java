@@ -10,7 +10,7 @@ import java.nio.file.Files;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AWSClientTest {
+public class AWSS3Test {
     @Test
     public void ShouldCreateAndGetObject() throws IOException {
         AWSClient client = AWSClient.getInstance();

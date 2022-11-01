@@ -25,7 +25,7 @@ class AWSDataObjectHelper implements IDataObjectHelper {
         ResponseBytes<GetObjectResponse> result;
 
         try {
-            result = AWSClient.getInstance().getClient().getObjectAsBytes(objectRequestGet);
+            result = AWSClient.getInstance().getS3Client().getObjectAsBytes(objectRequestGet);
         } catch (Exception e) {
             throw new RuntimeException("Key not found");
         }
@@ -39,7 +39,7 @@ class AWSDataObjectHelper implements IDataObjectHelper {
                 .bucket(config.get("AWS_BUCKET_NAME"))
                 .key(objectName)
                 .build();
-        AWSClient.getInstance().getClient().putObject(objectRequest, RequestBody.fromFile(file));
+        AWSClient.getInstance().getS3Client().putObject(objectRequest, RequestBody.fromFile(file));
     }
 
     @Override
@@ -54,7 +54,7 @@ class AWSDataObjectHelper implements IDataObjectHelper {
                 .key(objectName)
                 .build();
 
-        AWSClient.getInstance().getClient().deleteObject(request);
+        AWSClient.getInstance().getS3Client().deleteObject(request);
     }
 
     @Override
