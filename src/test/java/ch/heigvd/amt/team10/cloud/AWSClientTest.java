@@ -9,22 +9,24 @@ public class AWSClientTest {
     @Test
     public void ShouldCreateObject() {
         AWSClient client = AWSClient.getInstance();
-        client.setRegion(Region.EU_WEST_2);
         client.dataObject().create("test", new File("./chad.jpg"));
     }
 
     @Test
     public void ShouldGetObject() {
-        // TODO
+        AWSClient client = AWSClient.getInstance();
+        client.dataObject().get("test");
     }
 
     @Test
     public void ShouldUpdateObject() {
-        // TODO
+        AWSClient client = AWSClient.getInstance();
+        client.dataObject().update("test", new File("./chad.jpg"));
     }
 
     @Test
     public void ShouldDeleteObject() {
-        // TODO
+        AWSClient client = AWSClient.getInstance();
+        client.dataObject().delete("test");
     }
 }

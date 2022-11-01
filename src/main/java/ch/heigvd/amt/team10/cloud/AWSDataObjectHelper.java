@@ -9,6 +9,12 @@ import java.io.File;
 
 class AWSDataObjectHelper implements IDataObjectHelper {
 
+    private AWSClient client;
+
+    AWSDataObjectHelper(AWSClient client) {
+        this.client = client;
+    }
+
     @Override
     public void get(String objectName) {
         Dotenv dotenv = Dotenv.configure().load();
@@ -34,12 +40,17 @@ class AWSDataObjectHelper implements IDataObjectHelper {
     }
 
     @Override
-    public void update(String objectName) {
+    public void update(String objectName, File newFile) {
 
     }
 
     @Override
     public void delete(String objectName) {
 
+    }
+
+    @Override
+    public String publish(String objectName) {
+        return null;
     }
 }

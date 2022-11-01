@@ -1,5 +1,6 @@
 package ch.heigvd.amt.team10.cloud;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -13,7 +14,10 @@ public class AWSClient implements ICloudClient {
     private AwsBasicCredentials creds;
 
     private AWSClient() {
+        Dotenv dotenv = Dotenv.configure().load();
+        this.region = Region.of(dotenv.get("AWS_REGION"));
         this.creds = AwsBasicCredentials.create(System.getenv("AWS_ACCESS_KEY_ID"), System.getenv("AWS_SECRET_ACCESS_KEY"));
+        this.s3 = S3Client.builder().region(region).build();
     }
 
     public static AWSClient getInstance() {
@@ -23,17 +27,10 @@ public class AWSClient implements ICloudClient {
     }
 
     public AWSDataObjectHelper dataObject() {
-        // TODO: throw if s3 client not init
         return dataObjectHelper;
     }
 
     public AWSLabelDetectorHelper labelDetector() {
-        // TODO: throw if s3 client not init
         return labelDetectorHelper;
-    }
-
-    public void setRegion(Region region) {
-        this.region = region;
-        this.s3 = S3Client.builder().region(region).build();
     }
 }
