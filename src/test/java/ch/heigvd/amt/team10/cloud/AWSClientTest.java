@@ -1,32 +1,56 @@
 package ch.heigvd.amt.team10.cloud;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
-import software.amazon.awssdk.regions.Region;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AWSClientTest {
     @Test
-    public void ShouldCreateObject() {
+    public void ShouldCreateAndGetObject() throws IOException {
         AWSClient client = AWSClient.getInstance();
-        client.dataObject().create("test", new File("./chad.jpg"));
+        File originFile = new File("chad.jpg");
+        client.dataObject().create("test.jpg", originFile);
+
+        File outputFile = new File("outputFile.jpg");
+        FileOutputStream outputStream = new FileOutputStream(outputFile);
+        outputStream.write(client.dataObject().get("test.jpg"));
+        outputStream.close();
+
+        assertEquals(Files.mismatch(originFile.toPath(), outputFile.toPath()), -1L);
     }
 
     @Test
-    public void ShouldGetObject() {
+    public void ShouldUpdateObject() throws IOException {
         AWSClient client = AWSClient.getInstance();
-        client.dataObject().get("test");
-    }
+        client.dataObject().create("test.jpg", new File("chad.jpg"));
+        client.dataObject().update("test.jpg", new File("test.jpg"));
 
-    @Test
-    public void ShouldUpdateObject() {
-        AWSClient client = AWSClient.getInstance();
-        client.dataObject().update("test", new File("./chad.jpg"));
+        File originFile = new File("test.jpg");
+        client.dataObject().create("test.jpg", originFile);
+
+        File outputFile = new File("outputFile.jpg");
+        FileOutputStream outputStream = new FileOutputStream(outputFile);
+        outputStream.write(client.dataObject().get("test.jpg"));
+        outputStream.close();
+
+        assertEquals(Files.mismatch(originFile.toPath(), outputFile.toPath()), -1L);
     }
 
     @Test
     public void ShouldDeleteObject() {
         AWSClient client = AWSClient.getInstance();
-        client.dataObject().delete("test");
+        client.dataObject().delete("test.jpg");
+        assertThrows(RuntimeException.class, () -> client.dataObject().get("test.jpg"));
+    }
+
+    @AfterAll
+    static void cleanup(){
+        new File("outputFile.jpg").delete();
     }
 }
