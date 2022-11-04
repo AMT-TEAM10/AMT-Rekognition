@@ -1,5 +1,6 @@
 package ch.heigvd.amt.team10.cloud;
 
+import ch.heigvd.amt.team10.Env;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
@@ -21,7 +22,7 @@ class AWSDataObjectHelper implements IDataObjectHelper {
     public byte[] get(String objectName) {
         GetObjectRequest objectRequestGet = GetObjectRequest
                 .builder()
-                .bucket(System.getenv("AWS_BUCKET_NAME"))
+                .bucket(Env.get("AWS_BUCKET_NAME"))
                 .key(objectName)
                 .build();
 
@@ -39,7 +40,7 @@ class AWSDataObjectHelper implements IDataObjectHelper {
     @Override
     public void create(String objectName, File file) {
         PutObjectRequest objectRequest = PutObjectRequest.builder()
-                .bucket(System.getenv("AWS_BUCKET_NAME"))
+                .bucket(Env.get("AWS_BUCKET_NAME"))
                 .key(objectName)
                 .build();
         AWSClient.getInstance().getS3Client().putObject(objectRequest, RequestBody.fromFile(file));
@@ -53,7 +54,7 @@ class AWSDataObjectHelper implements IDataObjectHelper {
     @Override
     public void delete(String objectName) {
         DeleteObjectRequest request = DeleteObjectRequest.builder()
-                .bucket(System.getenv("AWS_BUCKET_NAME"))
+                .bucket(Env.get("AWS_BUCKET_NAME"))
                 .key(objectName)
                 .build();
 
