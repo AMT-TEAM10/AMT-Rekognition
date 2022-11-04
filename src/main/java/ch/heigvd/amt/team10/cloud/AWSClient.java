@@ -1,7 +1,6 @@
 package ch.heigvd.amt.team10.cloud;
 
-import io.github.cdimascio.dotenv.Dotenv;
-import org.apache.log4j.BasicConfigurator;
+import ch.heigvd.amt.team10.Env;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -20,14 +19,8 @@ public class AWSClient implements ICloudClient {
     private final AwsCredentialsProvider credentialsProvider;
 
     private AWSClient() {
-        BasicConfigurator.configure();
-        Dotenv
-                .configure()
-                .ignoreIfMissing()
-                .systemProperties()
-                .load();
-        this.region = Region.of(System.getenv("AWS_REGION"));
-        this.credentialsProvider = StaticCredentialsProvider.create(AwsBasicCredentials.create(System.getenv("AWS_ACCESS_KEY_ID"), System.getenv("AWS_SECRET_ACCESS_KEY")));
+        this.region = Region.of(Env.get("AWS_REGION"));
+        this.credentialsProvider = StaticCredentialsProvider.create(AwsBasicCredentials.create(Env.get("AWS_ACCESS_KEY_ID"), Env.get("AWS_SECRET_ACCESS_KEY")));
         this.s3Client = S3Client.builder().region(region).build();
         this.rekognitionClient = RekognitionClient.builder().credentialsProvider(this.getCredentials()).region(this.getRegion()).build();
         dataObjectHelper = new AWSDataObjectHelper();
