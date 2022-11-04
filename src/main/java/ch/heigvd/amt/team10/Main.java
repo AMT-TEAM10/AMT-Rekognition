@@ -1,8 +1,6 @@
 package ch.heigvd.amt.team10;
 
 import ch.heigvd.amt.team10.cloud.AWSClient;
-import io.github.cdimascio.dotenv.Dotenv;
-import org.apache.log4j.BasicConfigurator;
 
 import java.io.IOException;
 

@@ -6,13 +6,16 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.file.Files;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AWSS3Test {
     @Test
-    public void ShouldCreateAndGetObject() throws IOException {
+    public void shouldCreateAndGetObject() throws IOException {
         AWSClient client = AWSClient.getInstance();
         File originFile = new File("chad.jpg");
         client.dataObject().create("test.jpg", originFile);
@@ -26,7 +29,7 @@ public class AWSS3Test {
     }
 
     @Test
-    public void ShouldUpdateObject() throws IOException {
+    public void shouldUpdateObject() throws IOException {
         AWSClient client = AWSClient.getInstance();
         client.dataObject().create("test.jpg", new File("chad.jpg"));
         client.dataObject().update("test.jpg", new File("test.jpg"));
@@ -43,14 +46,23 @@ public class AWSS3Test {
     }
 
     @Test
-    public void ShouldDeleteObject() {
+    public void shouldDeleteObject() {
         AWSClient client = AWSClient.getInstance();
         client.dataObject().delete("test.jpg");
         assertThrows(RuntimeException.class, () -> client.dataObject().get("test.jpg"));
     }
 
+    @Test
+    public void shouldGetAnUrlWithPublish() throws IOException {
+        AWSClient client = AWSClient.getInstance();
+        URL url = new URL(client.dataObject().publish("test.jpg"));
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        assertEquals(con.getResponseCode(), 200);
+    }
+
     @AfterAll
-    static void cleanup(){
+    static void cleanup() {
         new File("outputFile.jpg").delete();
     }
 }
