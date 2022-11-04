@@ -6,9 +6,12 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.file.Files;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AWSS3Test {
     @Test
@@ -50,13 +53,16 @@ public class AWSS3Test {
     }
 
     @Test
-    public void shouldGetAnUrlWithPublish() {
+    public void shouldGetAnUrlWithPublish() throws IOException {
         AWSClient client = AWSClient.getInstance();
-        System.out.println(client.dataObject().publish("test.jpg"));
+        URL url = new URL(client.dataObject().publish("test.jpg"));
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        con.setRequestMethod("GET");
+        assertEquals(con.getResponseCode(), 200);
     }
 
     @AfterAll
-    static void cleanup(){
+    static void cleanup() {
         new File("outputFile.jpg").delete();
     }
 }

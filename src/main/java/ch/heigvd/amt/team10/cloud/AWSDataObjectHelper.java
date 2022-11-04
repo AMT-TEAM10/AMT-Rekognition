@@ -3,15 +3,10 @@ package ch.heigvd.amt.team10.cloud;
 import ch.heigvd.amt.team10.Env;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
-import software.amazon.awssdk.services.s3.model.GetObjectResponse;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.*;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
-import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
-import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 
 import java.io.File;
 import java.time.Duration;
@@ -66,7 +61,7 @@ class AWSDataObjectHelper implements IDataObjectHelper {
         S3Presigner presigner = S3Presigner.create();
 
         GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-                .bucket(config.get("AWS_BUCKET_NAME"))
+                .bucket(Env.get("AWS_BUCKET_NAME"))
                 .key(objectName)
                 .build();
 
