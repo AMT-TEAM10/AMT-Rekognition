@@ -1,6 +1,9 @@
 package ch.heigvd.amt.team10.cloud;
 
+import software.amazon.awssdk.services.rekognition.model.Image;
+
 import java.io.IOException;
+import java.net.URL;
 
 public interface ILabelDetector {
     /**
@@ -11,5 +14,9 @@ public interface ILabelDetector {
      * @return An array of labels
      * @throws IOException If the image cannot be downloaded
      */
-    Label[] execute(String imageUri, int maxLabels, float minConfidence) throws IOException;
+    Label[] executeFromURL(String imageUri, int maxLabels, float minConfidence) throws IOException;
+
+    Label[] executeFromURL(URL imageUri, int maxLabels, float minConfidence) throws IOException;
+
+    Label[] executeFromBase64(String base64Image, int maxLabels, float minConfidence) throws IOException;
 }
