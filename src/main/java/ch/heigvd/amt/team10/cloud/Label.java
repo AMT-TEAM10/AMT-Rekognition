@@ -7,9 +7,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
- * @author Nicolas Crausaz & Maxime Scharwath
- * @param name The name of the label
+ * A label represents a result of a image labellisation analysis
+ *
+ * @param name       The name of the label
  * @param confidence The confidence of the label (between 0 and 1)
+ * @author Nicolas Crausaz
+ * @author Maxime Scharwath
  */
 public record Label(String name, float confidence) {
     @Override

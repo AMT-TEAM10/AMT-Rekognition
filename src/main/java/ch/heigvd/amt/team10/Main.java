@@ -9,13 +9,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-
 /**
  * Application entrypoint
  *
  * @author Nicolas Crausaz
  * @author Maxime Scharwath
  */
+
 public class Main {
     /**
      * Sample code for API usage

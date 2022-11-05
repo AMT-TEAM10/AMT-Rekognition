@@ -3,6 +3,12 @@ package ch.heigvd.amt.team10;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.apache.log4j.BasicConfigurator;
 
+/**
+ * Configuration loader
+ *
+ * @author Nicolas Crausaz
+ * @author Maxime Scharwath
+ */
 public class Env {
     private static Env instance;
     private final Dotenv env;

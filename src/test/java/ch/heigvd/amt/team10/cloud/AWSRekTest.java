@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 
@@ -12,13 +13,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class AWSRekTest {
     @Test
-    public void ShouldGetLabelDetector() {
+    public void shouldGetLabelDetector() {
         AWSClient client = AWSClient.getInstance();
         assertNotNull(client.labelDetector());
     }
 
     @Test
-    public void ShouldDetectLabelsFromURL() throws IOException {
+    public void shouldDetectLabelsFromURLString() throws IOException {
         AWSClient client = AWSClient.getInstance();
         var labelDetector = client.labelDetector();
         String exampleUrl = "https://upload.wikimedia.org/wikipedia/commons/9/9d/NYC_Montage_2014_4_-_Jleon.jpg";
@@ -30,7 +31,19 @@ public class AWSRekTest {
     }
 
     @Test
-    public void ShouldDetectLabelsFromBase64() throws IOException {
+    public void shouldDetectLabelsFromURL() throws IOException {
+        AWSClient client = AWSClient.getInstance();
+        var labelDetector = client.labelDetector();
+        URL exampleUrl = new URL("https://upload.wikimedia.org/wikipedia/commons/9/9d/NYC_Montage_2014_4_-_Jleon.jpg");
+        var labels = labelDetector.execute(exampleUrl, 5, 0.7f);
+        assertEquals(labels.length, 5);
+        for (var label : labels) {
+            assertTrue(label.confidence() >= 0.7f);
+        }
+    }
+
+    @Test
+    public void shouldDetectLabelsFromBase64() throws IOException {
         AWSClient client = AWSClient.getInstance();
         AWSLabelDetectorHelper labelDetector = client.labelDetector();
 

@@ -2,7 +2,15 @@ package ch.heigvd.amt.team10.cloud;
 
 import java.io.File;
 
+/**
+ * Defines a object storage manager
+ *
+ * @author Nicolas Crausaz
+ * @author Maxime Scharwath
+ */
 public interface IDataObjectHelper {
+    void createBucket(String bucketName);
+
     byte[] get(String objectName);
 
     void create(String objectName, File file);

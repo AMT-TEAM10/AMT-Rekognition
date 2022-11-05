@@ -8,6 +8,12 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.rekognition.RekognitionClient;
 import software.amazon.awssdk.services.s3.S3Client;
 
+/**
+ * AWS Cloud Client
+ *
+ * @author Nicolas Crausaz
+ * @author Maxime Scharwath
+ */
 public class AWSClient implements ICloudClient {
     private final AWSDataObjectHelper dataObjectHelper;
     private final AWSLabelDetectorHelper labelDetectorHelper;
@@ -41,10 +47,12 @@ public class AWSClient implements ICloudClient {
         return credentialsProvider;
     }
 
+    @Override
     public AWSDataObjectHelper dataObject() {
         return dataObjectHelper;
     }
 
+    @Override
     public AWSLabelDetectorHelper labelDetector() {
         return labelDetectorHelper;
     }

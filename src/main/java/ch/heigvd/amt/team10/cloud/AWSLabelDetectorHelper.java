@@ -11,6 +11,12 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.ByteBuffer;
 
+/**
+ * Helper for AWS Label Rekognition
+ *
+ * @author Nicolas Crausaz
+ * @author Maxime Scharwath
+ */
 public class AWSLabelDetectorHelper implements ILabelDetector {
     @Override
     public Label[] execute(String imageUri, int maxLabels, float minConfidence) throws IOException {
