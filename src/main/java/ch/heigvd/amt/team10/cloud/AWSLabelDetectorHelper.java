@@ -9,27 +9,24 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.ByteBuffer;
 
 public class AWSLabelDetectorHelper implements ILabelDetector {
     @Override
-    public Label[] executeFromURL(String imageUri, int maxLabels, float minConfidence) throws IOException {
+    public Label[] execute(String imageUri, int maxLabels, float minConfidence) throws IOException {
         SdkBytes sourceBytes = SdkBytes.fromInputStream(downloadImage(imageUri));
-        Image srcImage = Image.builder()
-                .bytes(sourceBytes)
-                .build();
-
-        return getLabels(srcImage, maxLabels, minConfidence);
+        return getLabels(sourceBytes, maxLabels, minConfidence);
     }
 
     @Override
-    public Label[] executeFromURL(URL imageUri, int maxLabels, float minConfidence) throws IOException {
-        return executeFromURL(imageUri.toString(), maxLabels, minConfidence);
+    public Label[] execute(URL imageUri, int maxLabels, float minConfidence) throws IOException {
+        return execute(imageUri.toString(), maxLabels, minConfidence);
     }
 
     @Override
-    public Label[] executeFromBase64(String base64Image, int maxLabels, float minConfidence) {
-        Image image = Image.builder().bytes(SdkBytes.fromUtf8String(base64Image)).build();
-        return getLabels(image, maxLabels, minConfidence);
+    public Label[] execute(ByteBuffer base64Image, int maxLabels, float minConfidence) {
+        SdkBytes sourceBytes = SdkBytes.fromByteBuffer(base64Image);
+        return getLabels(sourceBytes, maxLabels, minConfidence);
     }
 
     private InputStream downloadImage(String imageUri) throws IOException {
@@ -37,7 +34,8 @@ public class AWSLabelDetectorHelper implements ILabelDetector {
         return new BufferedInputStream(url.openStream());
     }
 
-    private Label[] getLabels(Image image, int maxLabels, float minConfidence) {
+    private Label[] getLabels(SdkBytes sourceBytes, int maxLabels, float minConfidence) {
+        Image image = Image.builder().bytes(sourceBytes).build();
         DetectLabelsRequest detectLabelsRequest = DetectLabelsRequest.builder()
                 .image(image)
                 .maxLabels(maxLabels)

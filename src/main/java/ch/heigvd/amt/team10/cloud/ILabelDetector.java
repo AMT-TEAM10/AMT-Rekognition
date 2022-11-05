@@ -4,6 +4,7 @@ import software.amazon.awssdk.services.rekognition.model.Image;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.ByteBuffer;
 
 public interface ILabelDetector {
     /**
@@ -14,9 +15,9 @@ public interface ILabelDetector {
      * @return An array of labels
      * @throws IOException If the image cannot be downloaded
      */
-    Label[] executeFromURL(String imageUri, int maxLabels, float minConfidence) throws IOException;
+    Label[] execute(String imageUri, int maxLabels, float minConfidence) throws IOException;
 
-    Label[] executeFromURL(URL imageUri, int maxLabels, float minConfidence) throws IOException;
+    Label[] execute(URL imageUri, int maxLabels, float minConfidence) throws IOException;
 
-    Label[] executeFromBase64(String base64Image, int maxLabels, float minConfidence) throws IOException;
+    Label[] execute(ByteBuffer base64Image, int maxLabels, float minConfidence) throws IOException;
 }
