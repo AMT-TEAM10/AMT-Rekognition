@@ -27,7 +27,7 @@ public class AWSClient implements ICloudClient {
     private AWSClient() {
         this.region = Region.of(Env.get("AWS_REGION"));
         this.credentialsProvider = StaticCredentialsProvider.create(AwsBasicCredentials.create(Env.get("AWS_ACCESS_KEY_ID"), Env.get("AWS_SECRET_ACCESS_KEY")));
-        this.s3Client = S3Client.builder().region(region).build();
+        this.s3Client = S3Client.builder().region(region).credentialsProvider(this.getCredentials()).build();
         this.rekognitionClient = RekognitionClient.builder().credentialsProvider(this.getCredentials()).region(this.getRegion()).build();
         dataObjectHelper = new AWSDataObjectHelper();
         labelDetectorHelper = new AWSLabelDetectorHelper();
@@ -37,14 +37,6 @@ public class AWSClient implements ICloudClient {
         if (instance == null)
             instance = new AWSClient();
         return instance;
-    }
-
-    public Region getRegion() {
-        return region;
-    }
-
-    public AwsCredentialsProvider getCredentials() {
-        return credentialsProvider;
     }
 
     @Override
@@ -63,5 +55,13 @@ public class AWSClient implements ICloudClient {
 
     RekognitionClient getRekognitionClient() {
         return rekognitionClient;
+    }
+
+    Region getRegion() {
+        return region;
+    }
+
+    AwsCredentialsProvider getCredentials() {
+        return credentialsProvider;
     }
 }
