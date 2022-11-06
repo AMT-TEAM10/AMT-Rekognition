@@ -11,7 +11,25 @@ import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequ
 import java.io.File;
 import java.time.Duration;
 
-class AWSDataObjectHelper implements IDataObjectHelper {
+/**
+ * Helper for AWS S3 object storage
+ *
+ * @author Nicolas Crausaz
+ * @author Maxime Scharwath
+ */
+public class AWSDataObjectHelper implements IDataObjectHelper {
+
+    @Override
+    public void createBucket(String bucketName) {
+        AWSClient client = AWSClient.getInstance();
+
+        try {
+            CreateBucketRequest req = CreateBucketRequest.builder().bucket(bucketName).build();
+            client.getS3Client().createBucket(req);
+        } catch(Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 
     @Override
     public byte[] get(String objectName) {
@@ -39,6 +57,15 @@ class AWSDataObjectHelper implements IDataObjectHelper {
                 .key(objectName)
                 .build();
         AWSClient.getInstance().getS3Client().putObject(objectRequest, RequestBody.fromFile(file));
+    }
+
+    @Override
+    public void create(String objectName, String rawContent) {
+        PutObjectRequest objectRequest = PutObjectRequest.builder()
+                .bucket(Env.get("AWS_BUCKET_NAME"))
+                .key(objectName)
+                .build();
+        AWSClient.getInstance().getS3Client().putObject(objectRequest, RequestBody.fromString(rawContent));
     }
 
     @Override
