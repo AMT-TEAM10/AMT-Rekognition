@@ -19,6 +19,8 @@ import java.time.Duration;
  */
 public class AWSDataObjectHelper implements IDataObjectHelper {
 
+    private final static int PUBLIC_LINK_VALIDITY_DURATION = 60;
+
     @Override
     public void createBucket(String bucketName) {
         AWSClient client = AWSClient.getInstance();
@@ -26,7 +28,7 @@ public class AWSDataObjectHelper implements IDataObjectHelper {
         try {
             CreateBucketRequest req = CreateBucketRequest.builder().bucket(bucketName).build();
             client.getS3Client().createBucket(req);
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -85,7 +87,9 @@ public class AWSDataObjectHelper implements IDataObjectHelper {
 
     @Override
     public String publish(String objectName) {
-        S3Presigner presigner = S3Presigner.create();
+        S3Presigner presigner = S3Presigner.builder()
+                .credentialsProvider(AWSClient.getInstance().getCredentials())
+                .build();
 
         GetObjectRequest getObjectRequest = GetObjectRequest.builder()
                 .bucket(Env.get("AWS_BUCKET_NAME"))
@@ -93,7 +97,7 @@ public class AWSDataObjectHelper implements IDataObjectHelper {
                 .build();
 
         GetObjectPresignRequest getObjectPresignRequest = GetObjectPresignRequest.builder()
-                .signatureDuration(Duration.ofMinutes(60))
+                .signatureDuration(Duration.ofMinutes(PUBLIC_LINK_VALIDITY_DURATION))
                 .getObjectRequest(getObjectRequest)
                 .build();
 
