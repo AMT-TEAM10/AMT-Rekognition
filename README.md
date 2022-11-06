@@ -62,4 +62,3 @@ ou alors, exécuter un test unique :
 # Directives
 
 Toute documentation relative aux practices, dépendances, architecture se trouvent dans notre [Wiki](https://github.com/AMT-TEAM10/AMT-Rekognition/wiki).
-
