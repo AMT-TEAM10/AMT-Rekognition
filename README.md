@@ -36,7 +36,7 @@ Les dépendances détaillées du projet se trouvent [ici](https://github.com/AMT
 Pour installer les dépendances, entrer la commande suivante :
 > $ mvn install -DskipTests
 
-### Exécution
+### Exécution (en local)
 
 Pour générer un exécutable, entrer la commande suivante:
 
@@ -49,6 +49,17 @@ Pour exécuter le programme, copiez le fichier `./target/AMT-Rekognition-1.0-SNA
 
 > **Warning**
 > Il est important d'avoir copié les autres fichiers au même niveau que l'exécutable
+
+### Exécution (sur l'instance AWS)
+
+Nous avons déjà déployé manuellement tous les fichiers nécessaires pour exécuter l'application sur le serveur de production.
+
+Après s'être connecté sur l'instance, entrer les commandes suivantes:
+
+> $ cd app
+> $ docker compose up
+
+L'application s'exécutera dans un container, et son résultat sera affiché en fin d'exécution.
 
 # Tests
 
