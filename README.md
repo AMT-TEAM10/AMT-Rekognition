@@ -21,10 +21,10 @@ Vous devez également avoir à disposition : un Bucket AWS S3, ainsi que les cl�
 Copiez le contenu du fichier `.env.template` dans un nouveau fichier `.env` et ajoutez-y les informations nécessaires :
 
 ```
-AWS_BUCKET_NAME= <nom du bucket> (ex: test-bucket.example.com)
-AWS_ACCESS_KEY_ID= <access_key> (fournie par AWS)
-AWS_SECRET_ACCESS_KEY= <private_access_key> (fournie par AWS)
-AWS_REGION= <region du bucket> (ex: eu-west-2)
+AWS_BUCKET_NAME= nom du bucket (ex: test-bucket.example.com)
+AWS_ACCESS_KEY_ID= access_key (fournie par AWS)
+AWS_SECRET_ACCESS_KEY= private_access_key (fournie par AWS)
+AWS_REGION= region du bucket (ex: eu-west-2)
 ```
 
 ## Utilisation
@@ -57,7 +57,7 @@ Après avoir installé les dépendances, il est possible d'exécuter les test en
 
 ou alors, exécuter un test unique :
 
-> $ mvn test -Dtest="<testName>"
+> $ mvn test -Dtest="testName"
 
 # Directives
 
