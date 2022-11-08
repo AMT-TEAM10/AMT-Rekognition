@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+
 /**
  * Application entrypoint
  *
@@ -24,6 +25,8 @@ public class Main {
     public static void main(String[] args) throws IOException {
         AWSClient aws = AWSClient.getInstance();
 
+        System.out.println("Pushing main.jpeg to bucket...");
+
         // Push file to bucket
         aws.dataObject().create("main/main.jpeg", new File("main.jpeg"));
 
@@ -32,10 +35,19 @@ public class Main {
             imageBytes = ByteBuffer.wrap(IOUtils.toByteArray(inputStream));
         }
 
+        System.out.println("Analysing image...");
         // Analysis
         var labels = aws.labelDetector().execute(imageBytes, 20, 0.5f);
 
+        System.out.println("Found labels:");
+        for (var label: labels) {
+            System.out.println(label.toJSON());
+        }
+
+        System.out.println("Pushing result to bucket...");
         // Push analysis result as JSON
         aws.dataObject().create("main/result.json", Label.toJSONArray(labels));
+
+        System.out.println("Done !");
     }
 }
