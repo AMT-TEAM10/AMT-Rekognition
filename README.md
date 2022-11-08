@@ -9,7 +9,7 @@ Ce laboratoire consiste à mettre en œuvre une application permettant le stocka
 
 Pour utiliser cette application, il nécessaire d'avoir installé sur votre machine les dépendances suivantes :
 
-- Java 17
+- Java 18
 - Maven 3.8
 
 Voir [Wiki](https://github.com/AMT-TEAM10/AMT-Rekognition/wiki/D%C3%A9pendances) pour plus d'informations.
