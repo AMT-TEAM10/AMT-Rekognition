@@ -56,10 +56,12 @@ Nous avons déjà déployé manuellement tous les fichiers nécessaires pour ex�
 
 Après s'être connecté sur l'instance, entrer les commandes suivantes:
 
-> $ cd app
+> $ cd app \
 > $ docker compose up
 
 L'application s'exécutera dans un container, et son résultat sera affiché en fin d'exécution.
+
+Des explications plus détaillées sont disponible dans le [Wiki](https://github.com/AMT-TEAM10/AMT-Rekognition/wiki/Configuration,-d%C3%A9ploiement-et-production)
 
 # Tests
 
