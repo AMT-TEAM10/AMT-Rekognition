@@ -1,7 +1,6 @@
 package ch.heigvd.amt.team10;
 
 import io.github.cdimascio.dotenv.Dotenv;
-import org.apache.log4j.BasicConfigurator;
 
 /**
  * Configuration loader
@@ -14,7 +13,6 @@ public class Env {
     private final Dotenv env;
 
     private Env() {
-        BasicConfigurator.configure();
         env = Dotenv.configure().ignoreIfMissing().systemProperties().load();
     }
 
