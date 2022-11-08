@@ -70,6 +70,8 @@ $ docker compose up
 
 L'application s'exécutera dans un container, et son résultat sera affiché en fin d'exécution.
 
+Pour changer les credentials / variables d'env. sur l'environnement de production, il faut éditer les valeurs dans le fichier `app/docker-compose.yml`.
+
 Des explications plus détaillées sont disponible dans le [Wiki](https://github.com/AMT-TEAM10/AMT-Rekognition/wiki/Configuration,-d%C3%A9ploiement-et-production)
 
 # Tests
