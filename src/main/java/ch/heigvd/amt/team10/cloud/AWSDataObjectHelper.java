@@ -10,7 +10,8 @@ import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequ
 
 import java.io.File;
 import java.time.Duration;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Helper for AWS S3 object storage
@@ -76,6 +77,9 @@ public class AWSDataObjectHelper implements IDataObjectHelper {
 
     @Override
     public void delete(String objectName) {
+        if (!objectExists(objectName)) {
+            throw new RuntimeException("Object not found");
+        }
         DeleteObjectRequest request = DeleteObjectRequest.builder()
                 .bucket(Env.get("AWS_BUCKET_NAME"))
                 .key(objectName)
@@ -109,9 +113,9 @@ public class AWSDataObjectHelper implements IDataObjectHelper {
         try {
             AWSClient.getInstance().getS3Client()
                     .headObject(HeadObjectRequest.builder()
-                    .bucket(Env.get("AWS_BUCKET_NAME"))
-                    .key(objectName)
-                    .build());
+                            .bucket(Env.get("AWS_BUCKET_NAME"))
+                            .key(objectName)
+                            .build());
             return true;
         } catch (NoSuchKeyException e) {
             Logger.getLogger(AWSDataObjectHelper.class.getName()).log(Level.WARNING, e.getMessage());

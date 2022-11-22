@@ -11,8 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DataObjectHelperTest {
     //TODO REVIEW Test only one thing in your test case
@@ -23,6 +22,17 @@ public class DataObjectHelperTest {
     @BeforeAll
     public static void init() {
         client = AWSClient.getInstance();
+    }
+
+    @Test
+    public void shouldVerifyIfObjectExist() {
+        client.dataObject().create("test", "test");
+        assertTrue(client.dataObject().objectExists("test"));
+    }
+
+    @Test
+    public void shouldVerifyIfObjectDoesNotExist() {
+        assertFalse(client.dataObject().objectExists("thisObjectDoesNotExist"));
     }
 
     @Test
@@ -58,6 +68,11 @@ public class DataObjectHelperTest {
     public void shouldDeleteObject() {
         client.dataObject().delete("test.jpg");
         assertThrows(RuntimeException.class, () -> client.dataObject().get("test.jpg"));
+    }
+
+    @Test
+    public void shouldThrowWhenDeleteInexistantObject() {
+        assertThrows(RuntimeException.class, () -> client.dataObject().delete("thisObjectDoesNotExist.jpg"));
     }
 
     @Test
