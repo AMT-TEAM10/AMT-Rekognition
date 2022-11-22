@@ -10,6 +10,7 @@ import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequ
 
 import java.io.File;
 import java.time.Duration;
+import java.util.logging.*;
 
 /**
  * Helper for AWS S3 object storage
@@ -101,5 +102,20 @@ public class AWSDataObjectHelper implements IDataObjectHelper {
 
         PresignedGetObjectRequest presignedGetObjectRequest = presigner.presignGetObject(getObjectPresignRequest);
         return presignedGetObjectRequest.url().toString();
+    }
+
+    @Override
+    public boolean objectExists(String objectName) {
+        try {
+            AWSClient.getInstance().getS3Client()
+                    .headObject(HeadObjectRequest.builder()
+                    .bucket(Env.get("AWS_BUCKET_NAME"))
+                    .key(objectName)
+                    .build());
+            return true;
+        } catch (NoSuchKeyException e) {
+            Logger.getLogger(AWSDataObjectHelper.class.getName()).log(Level.WARNING, e.getMessage());
+            return false;
+        }
     }
 }
