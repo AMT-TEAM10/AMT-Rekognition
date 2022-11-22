@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AWSS3Test {
+    //TODO REVIEW You should renam your test class. You test the helper, not S3.
     //TODO REVIEW @before each, all, class ??? Where are you ?
     //TODO REVIEW Test only one thing in your test case
     //TODO Add ObjectDoesExist in you code, without this it's complicate to validate your cases.

@@ -19,7 +19,7 @@ import java.time.Duration;
  */
 public class AWSDataObjectHelper implements IDataObjectHelper {
 
-    //TODO REVIEW Good idea, but must be set by the dev ops (without rebuild action)
+    //TODO REVIEW Good idea, but must be set/updated by the dev ops team (without rebuild action)
     private final static int PUBLIC_LINK_VALIDITY_DURATION = 60;
 
     @Override
