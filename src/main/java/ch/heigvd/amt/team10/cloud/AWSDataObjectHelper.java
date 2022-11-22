@@ -19,6 +19,7 @@ import java.time.Duration;
  */
 public class AWSDataObjectHelper implements IDataObjectHelper {
 
+    //TODO REVIEW Good idea, but must be set/updated by the dev ops team (without rebuild action)
     private final static int PUBLIC_LINK_VALIDITY_DURATION = 60;
 
     @Override
@@ -29,6 +30,7 @@ public class AWSDataObjectHelper implements IDataObjectHelper {
             CreateBucketRequest req = CreateBucketRequest.builder().bucket(bucketName).build();
             client.getS3Client().createBucket(req);
         } catch (Exception e) {
+            //TODO REVIEW Do not catch the whole world ! Be more specific !
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -46,9 +48,9 @@ public class AWSDataObjectHelper implements IDataObjectHelper {
         try {
             result = AWSClient.getInstance().getS3Client().getObjectAsBytes(objectRequestGet);
         } catch (Exception e) {
+            //TODO What kind of exception did you get ?
             throw new RuntimeException("Key not found");
         }
-
         return result.asByteArray();
     }
 
