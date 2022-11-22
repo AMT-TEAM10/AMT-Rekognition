@@ -14,9 +14,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AWSS3Test {
+    //TODO REVIEW @before each, all, class ??? Where are you ?
+    //TODO REVIEW Test only one thing in your test case
+    //TODO Add ObjectDoesExist in you code, without this it's complicate to validate your cases.
     @Test
     public void shouldCreateAndGetObject() throws IOException {
-        AWSClient client = AWSClient.getInstance();
+        AWSClient client = AWSClient.getInstance();//TODO REVIEW Good candidate for a before...
         File originFile = new File("chad.jpg");
         client.dataObject().create("test.jpg", originFile);
 
@@ -62,6 +65,7 @@ public class AWSS3Test {
     }
 
     @AfterAll
+    //TODO REVIEW Test before delete action (avoid exception)
     static void cleanup() {
         new File("outputFile.jpg").delete();
     }
