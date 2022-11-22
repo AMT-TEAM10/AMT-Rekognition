@@ -22,6 +22,8 @@ public interface ILabelDetector {
      */
     Label[] execute(String imageUri, int maxLabels, float minConfidence) throws IOException;
 
+    // TODO on attendait que vous utilisiez la fonctionalité du AWS SDK permettant
+    // d'aller lire l'image directement dans le S3 sans la stream.
     /**
      * Execute Rekognition analysis on image
      *

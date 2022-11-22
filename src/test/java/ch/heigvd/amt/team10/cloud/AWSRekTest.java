@@ -12,6 +12,13 @@ import java.nio.file.Files;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AWSRekTest {
+
+    // TODO Given-When-Then-ifiez vos tests (utilisez une approche BDD)
+
+    // TODO Factorisez vos tests : utilisez les annotations pour du pré/post
+    // traitement ainsi que des variables statiques ou d'environnement pour la
+    // configuration de vos tests.
+
     @Test
     public void shouldGetLabelDetector() {
         AWSClient client = AWSClient.getInstance();
