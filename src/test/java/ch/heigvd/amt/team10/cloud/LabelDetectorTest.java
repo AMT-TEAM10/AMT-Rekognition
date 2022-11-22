@@ -67,7 +67,7 @@ public class LabelDetectorTest {
     }
 
     @Test
-    public void shouldDetectLabelsFromPusblishedS3Link() throws IOException {
+    public void shouldDetectLabelsFromPublishedS3Link() throws IOException {
         client.dataObject().create("main/main.jpeg", new File("main.jpeg"));
         // Get link to bucket file
         String link = client.dataObject().publish("main/main.jpeg");
