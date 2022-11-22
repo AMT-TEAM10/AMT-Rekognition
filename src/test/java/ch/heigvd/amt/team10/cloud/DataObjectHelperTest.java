@@ -1,6 +1,7 @@
 package ch.heigvd.amt.team10.cloud;
 
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -13,14 +14,19 @@ import java.nio.file.Files;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class AWSS3Test {
-    //TODO REVIEW You should renam your test class. You test the helper, not S3.
-    //TODO REVIEW @before each, all, class ??? Where are you ?
+public class DataObjectHelperTest {
     //TODO REVIEW Test only one thing in your test case
     //TODO Add ObjectDoesExist in you code, without this it's complicate to validate your cases.
+
+    private static AWSClient client;
+
+    @BeforeAll
+    public static void init() {
+        client = AWSClient.getInstance();
+    }
+
     @Test
     public void shouldCreateAndGetObject() throws IOException {
-        AWSClient client = AWSClient.getInstance();//TODO REVIEW Good candidate for a before...
         File originFile = new File("chad.jpg");
         client.dataObject().create("test.jpg", originFile);
 
@@ -34,7 +40,6 @@ public class AWSS3Test {
 
     @Test
     public void shouldUpdateObject() throws IOException {
-        AWSClient client = AWSClient.getInstance();
         client.dataObject().create("test.jpg", new File("chad.jpg"));
         client.dataObject().update("test.jpg", new File("test.jpg"));
 
@@ -51,14 +56,12 @@ public class AWSS3Test {
 
     @Test
     public void shouldDeleteObject() {
-        AWSClient client = AWSClient.getInstance();
         client.dataObject().delete("test.jpg");
         assertThrows(RuntimeException.class, () -> client.dataObject().get("test.jpg"));
     }
 
     @Test
     public void shouldGetAnUrlWithPublish() throws IOException {
-        AWSClient client = AWSClient.getInstance();
         URL url = new URL(client.dataObject().publish("test.jpg"));
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("GET");
@@ -66,8 +69,10 @@ public class AWSS3Test {
     }
 
     @AfterAll
-    //TODO REVIEW Test before delete action (avoid exception)
     static void cleanup() {
-        new File("outputFile.jpg").delete();
+        final File toDelete = new File("outputFile.jpg");
+        if (toDelete.exists()) {
+            toDelete.delete();
+        }
     }
 }

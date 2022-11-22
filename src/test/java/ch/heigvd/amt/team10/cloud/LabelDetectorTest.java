@@ -1,17 +1,16 @@
 package ch.heigvd.amt.team10.cloud;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
 import java.net.URL;
 import java.nio.ByteBuffer;
-import java.nio.file.Files;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AWSRekTest {
+public class LabelDetectorTest {
 
     // TODO Given-When-Then-ifiez vos tests (utilisez une approche BDD)
 
@@ -19,18 +18,24 @@ public class AWSRekTest {
     // traitement ainsi que des variables statiques ou d'environnement pour la
     // configuration de vos tests.
 
+    private static ICloudClient client;
+    private static ILabelDetector detector;
+
+    @BeforeAll
+    public static void init() {
+        client = AWSClient.getInstance();
+        detector = client.labelDetector();
+    }
+
     @Test
     public void shouldGetLabelDetector() {
-        AWSClient client = AWSClient.getInstance();
-        assertNotNull(client.labelDetector());
+        assertNotNull(detector);
     }
 
     @Test
     public void shouldDetectLabelsFromURLString() throws IOException {
-        AWSClient client = AWSClient.getInstance();
-        var labelDetector = client.labelDetector();
         String exampleUrl = "https://upload.wikimedia.org/wikipedia/commons/9/9d/NYC_Montage_2014_4_-_Jleon.jpg";
-        var labels = labelDetector.execute(exampleUrl, 5, 0.7f);
+        var labels = detector.execute(exampleUrl, 5, 0.7f);
         assertEquals(labels.length, 5);
         for (var label : labels) {
             assertTrue(label.confidence() >= 0.7f);
@@ -39,10 +44,8 @@ public class AWSRekTest {
 
     @Test
     public void shouldDetectLabelsFromURL() throws IOException {
-        AWSClient client = AWSClient.getInstance();
-        var labelDetector = client.labelDetector();
         URL exampleUrl = new URL("https://upload.wikimedia.org/wikipedia/commons/9/9d/NYC_Montage_2014_4_-_Jleon.jpg");
-        var labels = labelDetector.execute(exampleUrl, 5, 0.7f);
+        var labels = detector.execute(exampleUrl, 5, 0.7f);
         assertEquals(labels.length, 5);
         for (var label : labels) {
             assertTrue(label.confidence() >= 0.7f);
@@ -51,15 +54,12 @@ public class AWSRekTest {
 
     @Test
     public void shouldDetectLabelsFromBase64() throws IOException {
-        AWSClient client = AWSClient.getInstance();
-        AWSLabelDetectorHelper labelDetector = client.labelDetector();
-
         ByteBuffer imageBytes;
         try (InputStream inputStream = new FileInputStream("main.jpeg")) {
             imageBytes = ByteBuffer.wrap(IOUtils.toByteArray(inputStream));
         }
 
-        var labels = labelDetector.execute(imageBytes, 5, 0.7f);
+        var labels = detector.execute(imageBytes, 5, 0.7f);
         assertEquals(labels.length, 5);
         for (Label label : labels) {
             assertTrue(label.confidence() >= 0.7f);
@@ -68,14 +68,11 @@ public class AWSRekTest {
 
     @Test
     public void shouldDetectLabelsFromPusblishedS3Link() throws IOException {
-        AWSClient client = AWSClient.getInstance();
-        AWSLabelDetectorHelper labelDetector = client.labelDetector();
-
         client.dataObject().create("main/main.jpeg", new File("main.jpeg"));
         // Get link to bucket file
         String link = client.dataObject().publish("main/main.jpeg");
 
-        var labels = labelDetector.execute(link, 5, 0.7f);
+        var labels = detector.execute(link, 5, 0.7f);
         assertEquals(labels.length, 5);
         for (Label label : labels) {
             assertTrue(label.confidence() >= 0.7f);
