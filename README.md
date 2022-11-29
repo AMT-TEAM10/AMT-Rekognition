@@ -34,30 +34,59 @@ AWS_REGION= region du bucket (ex: eu-west-2)
 Les dépendances détaillées du projet se trouvent [ici](https://github.com/AMT-TEAM10/AMT-Rekognition/wiki/D%C3%A9pendances).
 
 Pour installer les dépendances, entrer la commande suivante :
-> $ mvn install -DskipTests
 
-### Exécution
+```bash
+$ mvn install -DskipTests
+```
+
+### Exécution (en local)
 
 Pour générer un exécutable, entrer la commande suivante:
 
-> $  mvn package
+```bash
+$  mvn package
+```
 
 Pour exécuter le programme, copiez le fichier `./target/AMT-Rekognition-1.0-SNAPSHOT-jar-with-dependencies.jar`
 `.env` et `main.jpeg` à l'endroit souhaité pour l'exécution, puis entrer la commande suivante :
 
-> $ java -jar AMT-Rekognition-1.0-SNAPSHOT-jar-with-dependencies.jar
+```bash
+$ java -jar AMT-Rekognition-1.0-SNAPSHOT-jar-with-dependencies.jar
+```
 
 > **Warning**
 > Il est important d'avoir copié les autres fichiers au même niveau que l'exécutable
 
+### Exécution (sur l'instance AWS)
+
+Nous avons déjà déployé manuellement tous les fichiers nécessaires pour exécuter l'application sur le serveur de production.
+
+Après s'être connecté sur l'instance, entrer les commandes suivantes:
+
+```bash
+$ cd app
+$ docker compose up
+```
+
+L'application s'exécutera dans un container, et son résultat sera affiché en fin d'exécution.
+
+Pour changer les credentials / variables d'env. sur l'environnement de production, il faut éditer les valeurs dans le fichier `app/docker-compose.yml`.
+
+Des explications plus détaillées sont disponible dans le [Wiki](https://github.com/AMT-TEAM10/AMT-Rekognition/wiki/Configuration,-d%C3%A9ploiement-et-production)
+
 # Tests
 
 Après avoir installé les dépendances, il est possible d'exécuter les test en entrant la commande suivante :
-> $ mvn tests
+
+```bash
+$ mvn tests
+```
 
 ou alors, exécuter un test unique :
 
-> $ mvn test -Dtest="testName"
+```bash
+$ mvn test -Dtest="testName"
+```
 
 # Directives
 

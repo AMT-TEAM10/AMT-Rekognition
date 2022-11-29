@@ -10,6 +10,8 @@ import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequ
 
 import java.io.File;
 import java.time.Duration;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Helper for AWS S3 object storage
@@ -18,8 +20,7 @@ import java.time.Duration;
  * @author Maxime Scharwath
  */
 public class AWSDataObjectHelper implements IDataObjectHelper {
-
-    private final static int PUBLIC_LINK_VALIDITY_DURATION = 60;
+    private final static int PUBLIC_LINK_VALIDITY_DURATION = Integer.parseInt(Env.get("PUBLIC_LINK_VALIDITY_DURATION"));
 
     @Override
     public void createBucket(String bucketName) {
@@ -28,7 +29,7 @@ public class AWSDataObjectHelper implements IDataObjectHelper {
         try {
             CreateBucketRequest req = CreateBucketRequest.builder().bucket(bucketName).build();
             client.getS3Client().createBucket(req);
-        } catch (Exception e) {
+        } catch (BucketAlreadyExistsException e) {
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -45,10 +46,9 @@ public class AWSDataObjectHelper implements IDataObjectHelper {
 
         try {
             result = AWSClient.getInstance().getS3Client().getObjectAsBytes(objectRequestGet);
-        } catch (Exception e) {
+        } catch (NoSuchKeyException e) {
             throw new RuntimeException("Key not found");
         }
-
         return result.asByteArray();
     }
 
@@ -77,6 +77,9 @@ public class AWSDataObjectHelper implements IDataObjectHelper {
 
     @Override
     public void delete(String objectName) {
+        if (!objectExists(objectName)) {
+            throw new RuntimeException("Object not found");
+        }
         DeleteObjectRequest request = DeleteObjectRequest.builder()
                 .bucket(Env.get("AWS_BUCKET_NAME"))
                 .key(objectName)
@@ -103,5 +106,20 @@ public class AWSDataObjectHelper implements IDataObjectHelper {
 
         PresignedGetObjectRequest presignedGetObjectRequest = presigner.presignGetObject(getObjectPresignRequest);
         return presignedGetObjectRequest.url().toString();
+    }
+
+    @Override
+    public boolean objectExists(String objectName) {
+        try {
+            AWSClient.getInstance().getS3Client()
+                    .headObject(HeadObjectRequest.builder()
+                            .bucket(Env.get("AWS_BUCKET_NAME"))
+                            .key(objectName)
+                            .build());
+            return true;
+        } catch (NoSuchKeyException e) {
+            Logger.getLogger(AWSDataObjectHelper.class.getName()).log(Level.WARNING, e.getMessage());
+            return false;
+        }
     }
 }
