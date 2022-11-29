@@ -63,4 +63,11 @@ public interface IDataObjectHelper {
      * @return URL to access object
      */
     String publish(String objectName);
+
+    /**
+     * Check if object exists on the object storage
+     * @param objectName object to check
+     * @return true if object exist, else false (will log exception)
+     */
+    boolean objectExists(String objectName);
 }
